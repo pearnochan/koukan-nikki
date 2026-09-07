@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  user_id               String   @id 
+  name                  String
+  login_id              String
+  password              String
+  
+
+  records       record[]
+  participants  recpac[]
+}
+
+model record {
+  rec_id                String    @id
+  title                 String
+  content               String
+  user_id               String
+  created_at            DateTime
+  stage_id              String 
+
+  author User @relation(fields:[user_id], references:[user_id])
+  stage  stage @relation(fields: [stage_id], references: [stage_id])
+
+  images       image[]        
+  rec_tags     rec_tag[]      
+  participants recpac[]       
+
+}
+
+model recpac {
+  rec_paticipant_id    String       @id @default(cuid())
+  rec_id               String
+  user_id              String
+
+  record record @relation(fields:[rec_id],references:[rec_id])
+  user User @relation(fields:[user_id], references:[user_id])
+
+  @@unique([rec_id,user_id])
+}
+
+model image {
+  image_id              String      @id @default(cuid())
+  url                   String
+  rec_id                String
+
+  record record @relation(fields:[rec_id],references:[rec_id])
+}
+
+model tag {
+  tag_id                String      @id 
+  tag_name              String      @unique
+
+  rec_tags rec_tag[]
+}
+
+model rec_tag{
+  rec_tag_id          String    @id
+  rec_id              String
+  tag_id              String
+
+  record record @relation(fields:[rec_id], references:[rec_id])
+  tag    tag    @relation(fields:[tag_id], references:[tag_id])
+
+  @@unique([rec_id, tag_id])
+}
+
+
+
+
+model stage {
+  stage_id       String @id @default(cuid())
+  name           String
+  required_count Int
+  image          String
+  order          Int
+
+  records record[]
+}
