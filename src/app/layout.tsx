@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
+import LogoutButton from "@/components/LogoutButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,7 +25,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <nav className="app-nav">
+          <Link href="/" className="app-nav-link">ホーム</Link>
+          <Link href="/records" className="app-nav-link">記録一覧</Link>
+          <Link href="/records/new" className="app-nav-link">記録をつける</Link>
+          <LogoutButton />
+        </nav>
+        {children}
+      </body>
     </html>
   );
 }

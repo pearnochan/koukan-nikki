@@ -3,6 +3,7 @@
 
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
+
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -40,6 +41,7 @@ model record {
 
 }
 
+//記録 ⇔ 利用者」の多対多を解消するテーブル
 model recpac {
   rec_paticipant_id    String       @id @default(cuid())
   rec_id               String
@@ -66,6 +68,7 @@ model tag {
   rec_tags rec_tag[]
 }
 
+//「記録 ⇔ タグ」の多対多を解消するテーブル
 model rec_tag{
   rec_tag_id          String    @id
   rec_id              String

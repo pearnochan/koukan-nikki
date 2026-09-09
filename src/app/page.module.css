@@ -1,0 +1,16 @@
+
+.container {
+    max-width: 80%;
+    /* 「幅の最大値」を決めるプロパティ */
+    margin: auto;
+    /* margin:箱の外側に作る余白 */
+    padding:3rem;
+    /* 箱の内側の余白 */
+    background: rgba(237, 151, 196, 0.667);
+    border-radius:20px; 
+    /* border-radiusは、箱の「角」を丸くするためのプロパティ */
+}
+
+.title {
+    
+}

@@ -7,6 +7,8 @@
 // クライアントコンポーネントとして動かすために 'use client' を付けている
 'use client'
 
+import styles from './page.module.css'
+
 // 画面上の値を覚えておくためのもの。
 // 今回だと、// ログインIDパスワードエラーメッセージを覚えるために使ってる。
 import React, { useState } from 'react'
@@ -59,32 +61,34 @@ export default function LoginPage() {
 
     // 実際の画面部分
     return(
-        <main className='login-container'>
-            <h1>ログイン</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="loginId">ログインID</label>
-                    <input
-                    id='loginId'
-                    type='text'
-                    value={loginId}
-                    onChange={(e) => setLoginId(e.target.value)}
-                    required
-                    />
-                </div>
-                <div>
-                    <label htmlFor='password'>パスワード</label>
-                    <input
-                    id='password'
-                    type='password'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    />
-                </div>
-                {error && <p>{error}</p>}
-                <button type='submit'>送信</button>
-            </form>
-        </main>
+    <main className={styles.container}>
+        <h1 className={styles.title}>ログイン</h1>
+        <form onSubmit={handleSubmit}>
+            <div className={styles.field}>
+                <label htmlFor="loginId" className={styles.label}>ログインID</label>
+                <input
+                id='loginId'
+                type='text'
+                className={styles.input}
+                value={loginId}
+                onChange={(e) => setLoginId(e.target.value)}
+                required
+                />
+            </div>
+            <div className={styles.field}>
+                <label htmlFor='password' className={styles.label}>パスワード</label>
+                <input
+                id='password'
+                type='password'
+                className={styles.input}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                />
+            </div>
+            {error && <p className={styles.error}>{error}</p>}
+            <button type='submit' className={styles.button}>送信</button>
+        </form>
+    </main>
     )
 }

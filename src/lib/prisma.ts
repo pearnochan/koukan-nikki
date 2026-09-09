@@ -1,4 +1,7 @@
 // PostgreSQLと実際に通信するためのアダプター（接続変換器）を持ってきている
+// PrismaClient = TypeScriptのコードから、そのDBを操作する道具
+
+//道具(PrismaClient)を1個作って、いろんなファイルから使い回せるように用意しておく」
 import { PrismaPg } from '@prisma/adapter-pg'
 
 // PrismaClientとは何か

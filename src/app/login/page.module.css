@@ -1,0 +1,58 @@
+
+/* クラスの名前を定義するよ」という宣言です。.(ドット)は「これはクラス名です」という印。login-containerは自分で決めた名前(HTML側でclassName="login-container"と書いた場所に、これから書くスタイルが適用されます */
+.container {
+  max-width: 400px;
+  margin: 4rem auto;
+  padding: 2rem;
+  background: #F0FAFF;
+  border: 3px solid #FFD1E3;
+  border-radius : 16px ;
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #FF6FA5;
+  text-align: center;
+}
+
+.field{
+  margin-bottom: 1rem;
+}
+
+.label {
+  display:block;
+  margin-bottom: 0.25rem;
+  color: #5a5a7a;
+}
+
+/* (入力欄そのもの) */
+/* login-inputという名前で、HTML側の<input className="login-input">に対応 */
+.input:focus{
+  width: 100%;
+  padding: 0.5rem;
+  border: 2px solid #bee7f5;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.button{
+  width:100%;
+  /* 内側の余白です。ボタンの枠と、中の文字「ログイン」との間にすき間を作り、押しやすい大きさにしてい */
+  padding:0.75rem;
+  background: #FF8FAB;
+  color: white;
+  border: none;
+  border-radius:8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.botton:hover{
+    background: #FF6FA5;
+}
+
+.login-error{
+  color: #E05780;
+  margin-top: 0.5rem;
+} 
