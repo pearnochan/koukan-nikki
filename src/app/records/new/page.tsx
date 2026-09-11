@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import RecordForm from '@/components/Recordform'
+import style from './page.module.css'
 
 export default async function NewRecordPage(){
     const users = await prisma.user.findMany({
@@ -7,8 +8,8 @@ export default async function NewRecordPage(){
     })
 
     return (
-        <main className="record-container">
-            <h1 className="record-title">記録をつける</h1>
+        <main className={style.container}>
+            <h1 className={style.title}>記録をつける</h1>
             <RecordForm users={users}/>
         </main>
     )

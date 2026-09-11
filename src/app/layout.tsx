@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import style from './layout.module.css';
 import Link from "next/link";
 import LogoutButton from "@/components/LogoutButton";
 
@@ -26,10 +26,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <nav className="app-nav">
-          <Link href="/" className="app-nav-link">ホーム</Link>
-          <Link href="/records" className="app-nav-link">記録一覧</Link>
-          <Link href="/records/new" className="app-nav-link">記録をつける</Link>
+        <nav className={style.nav}>
+          <span className={style.menuLabel}>menu</span>
+          <Link href="/" className="app-nav-link"> ホーム </Link>
+          <Link href="/records" className="app-nav-link"> 記録一覧 </Link>
+          <Link href="/records/new" className="app-nav-link"> 記録をつける </Link>
+          <Link href="/signup" className="app-nav-link"> 新規登録 </Link>
           <LogoutButton />
         </nav>
         {children}

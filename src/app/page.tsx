@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
+import style from './page.module.css'
 
 export default async function Home() {
   // recordテーブルの**行数(全部で何件あるか)**を数えています。count()は「数える」専用のメソッド
@@ -14,14 +15,17 @@ export default async function Home() {
   
 
    return (
-    <main className="avatar-container">
-      <h1 className="avatar-title">今日のアバター</h1>
-      <img src={currentStage?.image} alt={currentStage?.name} className="avatar-image" />
-      <p className="avatar-stage-name">{currentStage?.name}</p>
-      <Link href="/records" className="avatar-record-count">
+    <main className={style.container}>
+      <h1 className={style.title}>今日のアバター</h1>
+      <img src={currentStage?.image} alt={currentStage?.name} className={style.image} />
+      <p className={style.stagename}>{currentStage?.name}</p>
+      <Link href="/records" className={style.avatarcount}>
         記録数:{recordCount}件
       </Link>
-      <Link href="/records/new" className="avatar-new-record-link">
+      
+      <br />
+
+      <Link href="/records/new" className={style.avatarnewrecordlink}>
         記録をつける
       </Link>
     </main>

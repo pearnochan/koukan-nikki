@@ -1,3 +1,4 @@
+// 「このページはブラウザ側で動くコンポーネントですよ」
 'use client'
 
 import React, { useState } from 'react'
@@ -5,10 +6,13 @@ import { useRouter } from 'next/navigation'
 import styles from './page.module.css'
 
 export default function SignupPage(){
+    // 入力されるたび、その値を覚えておく
     const [name, setName] = useState('')
     const [loginId, setLoginId] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
+
+    // nextjsの機能で、ページの遷移を操るやつ的な
     const router = useRouter()
 
     async function handleSubmit(e: React.FormEvent){
@@ -17,8 +21,8 @@ export default function SignupPage(){
 
         const res = await fetch ('/api/signup',{
             method: 'POST',
-            headers:{ 'Content-Type': 'applivation/json'},
-            body:JSON.stringify({ name, login_id: setLoginId, password }),
+            headers:{ 'Content-Type': 'application/json'},
+            body:JSON.stringify({ name, login_id: loginId, password }),
         })
 
         if(!res.ok){

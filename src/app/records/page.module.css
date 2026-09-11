@@ -1,0 +1,38 @@
+自力
+/* .recordscontainer{
+    max-width: 90%;
+    margin: auto;
+    padding: 2rem;
+    background-color: rgb(233, 200, 222);
+    border-radius: 20px ;
+} */
+
+.recordstitle{
+    font-size: larger;
+    margin-bottom: 0.5rem;
+    color: aliceblue;
+    text-align: left;
+}
+
+.recordcard{
+   padding: 20px;
+   margin-bottom: 20px;
+   border-radius: 15px;
+   background: rgb(244, 210, 238);
+}
+
+.recordcardtitle{
+
+}
+
+.recordcardcontent{
+
+}
+
+.recordcardparticipants{
+
+}
+
+.recordcardtags{
+
+}
