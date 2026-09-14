@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import style from './page.module.css'
+import DeleteButton from '@/components/DeleteButton'
 
 // RecordsPageという名前の**コンポーネント(画面)**を定義しています。export defaultは「このファイルの主役はこの関数です」という意味、asyncが付いているのは、この中でawait(DBからのデータ取得を待つ処理)を使うためです。これはServer Component(サーバー側で実行される画面)なので、直接DBにアクセスできます。
 export default async function RecordsPage(){
@@ -38,6 +39,14 @@ export default async function RecordsPage(){
               タグ: {record.rec_tags.map((rt) => rt.tag.tag_name).join('、')}
             </p>
           )}
+          {record.images.length > 0 && (
+            <div className={style.recordcardimages}>
+              {record.images.map((image) => (
+                <img key={image.image_id} src={image.url} alt="" className={style.recordcardimage}/>
+              ))}
+              </div>
+          )}
+          <DeleteButton recId={record.rec_id}/>
         </div>
       ))}
      </main>

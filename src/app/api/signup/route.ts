@@ -1,9 +1,15 @@
+// 新規ユーザー登録のAPI処理
+
 import { prisma } from '@/lib/prisma'
+// APIの返事を作るための NextResponse を持ってくる。
 import { NextResponse } from 'next/server'
 
+// POSTで送られてきたリクエストを処理する関数
 export async function POST (request: Request){
+    // リクエストで送られてきたJSONの中から name・login_id・password を取り出している行
     const { name, login_id, password } = await request.json()
 
+    // Userテーブルから、今入力されたlogin_idと同じログインIDを持つユーザーを1人探して、その結果をexistingUserに入れる
     const existingUser = await prisma.user.findFirst({
         where: { login_id },
     })
@@ -12,6 +18,7 @@ export async function POST (request: Request){
         return NextResponse.json({ error: 'このログインIDはすでに使われています'},{status:400})
     }
 
+    // 新しいユーザーをデータベースに登録して、その登録されたユーザー情報を user に入れている処理
     const user = await prisma.user.create({
         data: {
             user_id: crypto.randomUUID(),
@@ -21,5 +28,6 @@ export async function POST (request: Request){
         },
     })
 
+    // 登録が成功したので、登録したユーザーのIDをAPIの返事として返す処理
     return NextResponse.json({ user_id: user.user_id })
 }

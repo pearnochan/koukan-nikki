@@ -15,22 +15,27 @@ export default function SignupPage(){
     // nextjsの機能で、ページの遷移を操るやつ的な
     const router = useRouter()
 
+    // 「フォームが送信されたら、通常の送信を止めて、エラーをリセットする」
     async function handleSubmit(e: React.FormEvent){
         e.preventDefault()
         setError('')
 
+        // 「新規登録のデータをサーバーに送る」
+        // /api/signup にPOSTで、名前・ログインID・パスワードをJSON形式で送って、サーバーからの返事を待ち、その返事を res に入れる
         const res = await fetch ('/api/signup',{
             method: 'POST',
             headers:{ 'Content-Type': 'application/json'},
             body:JSON.stringify({ name, login_id: loginId, password }),
         })
 
+        // 登録に失敗した場合の処理
         if(!res.ok){
             const data = await res.json()
             setError(data.error)
             return
         }
 
+        // ログインページに移動する
         router.push('/login')
     }
 

@@ -21,18 +21,16 @@
    background: rgb(244, 210, 238);
 }
 
-.recordcardtitle{
-
+.recordcardimages {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
 }
 
-.recordcardcontent{
-
-}
-
-.recordcardparticipants{
-
-}
-
-.recordcardtags{
-
+.recordcardimage {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
 }
