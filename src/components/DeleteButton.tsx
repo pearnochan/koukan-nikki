@@ -1,3 +1,6 @@
+// DeleteButton.tsx(Client Component)ここでのポイントは、「削除」ボタンをクリックするという、利用者の操作が発生する
+// クリックなどの操作に反応するのは、プラウざだけ
+
 'use client'
 
 import { useRouter } from "next/navigation"

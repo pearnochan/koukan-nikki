@@ -1,4 +1,5 @@
 // 「このページはブラウザ側で動くコンポーネントですよ」
+
 'use client'
 
 import React, { useState } from 'react'
