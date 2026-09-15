@@ -97,9 +97,13 @@ export async function POST(request: Request) {
         const filePath = path.join(uploadDir, fileName)
 
         // buffer に入っている画像データを、filePath に指定した場所へファイルとして保存して、保存が終わるまで待つ
+        // 画像ファイル本体
         await writeFile(filePath, buffer)
 
         // 画像ファイルを保存したあと、その画像の情報をデータベースにも登録する
+        // DBに保存しているもの
+        // DBのimageテーブルには、画像そのものではなく、「その画像がどこに保存されているか」という、パス(住所)の文字列だけを保存
+        // 画像ファイルは、テキストデータに比べてサイズが大きいため、DBに直接入れてしまうと、DB自体が重く、扱いにくくなってしまいます。「大きいデータはファイルとして保存し、DBにはその場所の情報だけ持たせる」というのが、一般的なやり方
         await prisma.image.create({
             data: {
                 image_id: crypto.randomUUID(),
