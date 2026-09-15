@@ -4,6 +4,8 @@ import { prisma } from '@/lib/prisma'
 // APIの返事を作るための NextResponse を持ってくる。
 import { NextResponse } from 'next/server'
 
+import bcrypt from 'bcryptjs'//パスワードハッシュ化するやつ
+
 // POSTで送られてきたリクエストを処理する関数
 export async function POST (request: Request){
     // リクエストで送られてきたJSONの中から name・login_id・password を取り出している行
@@ -18,13 +20,15 @@ export async function POST (request: Request){
         return NextResponse.json({ error: 'このログインIDはすでに使われています'},{status:400})
     }
 
+    const hashedPassword = await bcrypt.hash(password,10)
+
     // 新しいユーザーをデータベースに登録して、その登録されたユーザー情報を user に入れている処理
     const user = await prisma.user.create({
         data: {
             user_id: crypto.randomUUID(),
             name,
             login_id,
-            password,
+            password: hashedPassword,
         },
     })
 

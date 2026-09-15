@@ -1,0 +1,14 @@
+ブラウザで
+/records/new
+     ↓
+Next.jsが
+records/new/page.tsx を探す
+     ↓
+default export されている
+NewRecordPage を使う
+     ↓
+NewRecordPage()
+     ↓
+return (...)
+     ↓
+「記録をつける」画面

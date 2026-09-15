@@ -7,11 +7,13 @@ import RecordForm from '@/components/Recordform'
 
 import style from './page.module.css'
 
+// このファイルの外から、この関数を使えるように公開している
 export default async function NewRecordPage(){
     // データベースを見に行っているところ
-    // 「Userテーブルから複数のユーザーを取得してください」
+    // Userテーブルから、user_idとnameを複数取得する
     const users = await prisma.user.findMany({
         // ユーザーの情報のうち、何を取得するか
+        // true は「その項目を取得する」 という意味
         select: { user_id: true, name:true},
     })
 

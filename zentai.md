@@ -87,3 +87,5 @@ useclientは何？
 
 ## 仕様
 
+## docker-compose.yml
+どんな箱(コンテナ)をいくつ動かすか
