@@ -18,6 +18,8 @@ export const prisma =
     globalForPrisma.prisma ??
     // 何も入っていなければ、new PrismaClient(...)で新しく道具箱を作る
     // (その時、PrismaPgのアダプターを使って、.envのDATABASE_URLのPostgreSQLに繋ぐよう設定する)
+
+    // なぜPrisma v7では、このアダプターが必須になったのか
     new PrismaClient({
         adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL!}),
     })
