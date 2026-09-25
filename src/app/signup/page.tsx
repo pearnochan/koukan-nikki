@@ -51,6 +51,7 @@ export default function SignupPage(){
                         type='text'
                         className={styles.input}
                         value={name}
+                        // 入力欄に入力された文字を name に入れている
                         onChange={(e) => setName(e.target.value)}
                         required
                     />

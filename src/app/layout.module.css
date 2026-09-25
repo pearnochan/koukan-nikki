@@ -1,3 +1,6 @@
+/* メニュー部分がどう動くのか */
+
+/* HTMLの <nav className={style.nav}> に適用されるCSS */
 .nav{
     /* この要素を基準地点として扱ってね」という指定。 */
     position: relative;
@@ -7,6 +10,7 @@
     border-bottom: 3px solid #ade2f4;
 }
 
+/* "menu" の部分 */
 .menuLabel{
     /* 文字をより太くする */
     font-weight: bolder;
@@ -16,12 +20,14 @@
 }
 
 .menuList {
-    /* 画面の左端を基準にするため、navではなくbody全体を基準にする指定に変更(fixedを使用) */
+    /* 画面の左端を基準にするため、navではなくbody全体（画面全体）を基準にする指定に変更(fixedを使用) */
     position: fixed;
     top: 0;
     left: 0;
     display: flex;
+    /* 箱の中の要素を縦に並べる */
     flex-direction: column;
+    /* 並んでいる子要素同士の間隔 */
     gap: 1rem;
     padding: 2rem 1rem;
     /* menuの文字と同じくらいの細い幅にする */
@@ -31,23 +37,31 @@
     background: #ffffff;
     border-right: 2px solid #FFD1E3;
 
+    /* 透明にする */
     opacity: 0;
+    /* 「見えない状態」にする */
     visibility: hidden;
+    /* 箱を横方向に20px左へ移動する */
     transform: translateX(-20px);
+    /* X方向に移動させる */
+
+    /* CSSの状態が変わったとき、いきなり変化させず、なめらかに変化させる */
     transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
 }
 
+/* .nav にマウスが乗っている（:hover）とき、menuList を表示する*/
 .nav:hover .menuList{
     opacity: 1;
     visibility: visible;
     transform: translateX(0);
 }
 
+/* これはメニューのリンク文字。 */
 .navLink{
     color: #5A5A7A;
     text-decoration: none;
 }
-
+/* リンクそのものにマウスを乗せたら、文字色を変える */
 .navLink:hover{
     color: #FF6FA5;
 }
