@@ -13,8 +13,17 @@ datasource db {
   provider = "postgresql"
 }
 
+model Session {
+  session_id  String    @id @default(cuid())
+  user_id     String    
+  expires_at  DateTime
+  created_at  DateTime  @default(now())
+
+  user User @relation(fields: [user_id],  references: [user_id])
+}
+
 model User {
-  user_id               String   @id 
+  user_id               String   @id @default(cuid())
   name                  String
   login_id              String   @unique
   password              String
@@ -22,10 +31,11 @@ model User {
 
   records       record[]
   participants  recpac[]
+  sessions      Session[]
 }
 
 model record {
-  rec_id                String    @id
+  rec_id                String    @id @default(cuid())
   title                 String
   content               String
   user_id               String
@@ -36,10 +46,12 @@ model record {
   stage  stage @relation(fields: [stage_id], references: [stage_id])
 
   images       image[]        
-  rec_tags     rec_tag[]      
+  rec_tags     rec_tag[]     
+  //その記録に「一緒にいた人」を複数紐づけられるようにする 
   participants recpac[]       
 
 }
+
 
 //記録 ⇔ 利用者」の多対多を解消するテーブル
 model recpac {
@@ -62,7 +74,7 @@ model image {
 }
 
 model tag {
-  tag_id                String      @id 
+  tag_id                String      @id @default(cuid())
   tag_name              String      @unique
 
   rec_tags rec_tag[]
@@ -70,7 +82,7 @@ model tag {
 
 //「記録 ⇔ タグ」の多対多を解消するテーブル
 model rec_tag{
-  rec_tag_id          String    @id
+  rec_tag_id          String    @id @default(cuid())
   rec_id              String
   tag_id              String
 
@@ -86,9 +98,15 @@ model rec_tag{
 model stage {
   stage_id       String @id @default(cuid())
   name           String
+  //そのステージに進むために必要な記録回数 ⭐
   required_count Int
+  //そのステージで表示するアバター画像
   image          String
+
+  //ステージの順番
   order          Int
 
+  //そのステージに紐づいているrecordたち
   records record[]
 }
+

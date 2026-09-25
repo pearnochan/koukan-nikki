@@ -1,4 +1,5 @@
 // さっき作ったDB操作の道具箱を持ってくる
+// Prismaを使ってDBを操作できるようにする
 import { prisma } from '@/lib/prisma'
 
 // サーバーからの返事を作るための道具を持ってくる
@@ -8,7 +9,6 @@ import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 
 import bcrypt from 'bcryptjs'
-import { error } from 'console'
 
 // 関数を定義しています。POSTという名前にすることで、Next.jsが自動的に「このファイルへのPOSTリクエスト(データを送る形のアクセス)が来たら、この関数を実行する」と認識してくれます。asyncは「この関数の中でawait(後述)が使えます」という宣言、request: Requestは「送られてきたデータ(引数)」
 export async function POST(request: Request) {
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     // request(送られてきたデータ全部)の中身を、JSON形式として読み取るという処理です。awaitがついているのは、データを読み込むのに少し時間がかかるため
 
     // Userテーブルから、「login_idとpasswordが、さっき受け取った値と一致する人」を1人探しています。findFirstは「条件に合う最初の1件を探す」という意味のメソッドです。where: { login_id, password }はwhere: { login_id: login_id, password: password }の省略形
-    // 「DBのUserテーブルから、送られてきたログインIDとパスワードが一致するユーザーを探して、そのユーザーを user に入れる」
+    // login_idが一致するユーザーを探して、そのユーザーを user に入れる」
     const user = await prisma.user.findFirst({
         where:{login_id},
     })
@@ -28,12 +28,16 @@ export async function POST(request: Request) {
     if (!user) {
         return NextResponse.json(
             { error: 'ログインIDまたはパスワードが違います'},
+            // この返事は401という状態ですよとブラウザ（リクエストを送ってきた側）に伝えています
             { status: 401 }
         )
     }
 
     // 見つかったユーザーの、DBに保存されているハッシュ化済みのパスワード(user.password)と、今入力された平文のパスワード(password)を、bcrypt.compareで比較しています。一致していればtrueが返ってきます
-    const isValid = await bcrypt.compare(password, user.password)
+    const isValid = await 
+    // 入力されたパスワードと、データベースに保存されているパスワードを照らし合わせる
+    // ハッシュ化されたものと入力されたパスワードを照らし合わせ
+    bcrypt.compare(password, user.password)
 
     if (!isValid){
         return NextResponse.json(
@@ -42,10 +46,23 @@ export async function POST(request: Request) {
         )
     }
 
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7)
+
+    const session = await prisma.session.create({
+        data: {
+            user_id: user.user_id,
+            expires_at: expiresAt
+        },
+    })
+
+
     const cookieStore = await cookies()
     // クッキーを操作するための道具を取り出しています。
 
-    cookieStore.set('user_id', user.user_id, { httpOnly: true })
+    cookieStore.set('session_id', session.session_id, 
+        {   httpOnly: true,
+            expires: expiresAt,
+        })
     // 「ログインに成功したユーザーのIDを user_id という名前のCookieに保存する。ただし、JavaScriptから直接読めないようにする」
 
     // httpOnly: trueとは何か

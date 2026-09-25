@@ -1,7 +1,11 @@
+// 記録作成の裏側を全部担当
 // route.ts 自体が「API」というより、APIの具体的な処理を書くファイル
 
+// DBを操作
 import { prisma } from '@/lib/prisma'
+// APIからブラウザへ返事する
 import { NextResponse } from 'next/server'
+// ログイン状態のCookieを確認する
 import { cookies } from 'next/headers'
 import { writeFile, mkdir } from 'fs/promises'
 import path from 'path'
@@ -11,8 +15,26 @@ export async function POST(request: Request) {
     
     // ブラウザから送られてきたCookieを取得して、cookieStore に入れる
     const cookieStore = await cookies()
+    const sessionId = cookieStore.get('session_id')?.value
 
-    // Cookieの中から user_id を探して、その値を userId に入れている
+    if (!sessionId) {
+        return NextResponse.json({ error: 'ログインしてください'}, {status: 401})
+    }
+
+    // クッキーから取り出したsession_idを使って、Sessionテーブルから、対応するセッションを1件探しています。
+    const session = await prisma.session.findUnique({
+        where: { session_id: sessionId },
+    })
+
+    // 2つの条件を、||(または)でつなげています。
+    // !session → そもそも、そんなセッションがDBに存在しない(すでにログアウト済み、または不正なIDが送られてきた)
+    // session.expires_at < new Date() → セッションは存在するが、有効期限がもう過ぎている
+    if (!session || session.expires_at < new Date()){
+        return NextResponse.json({ error: 'ログインしてください'}, { status:401 })
+    }
+
+    // ログインしているか確認　　Cookieの中から user_id を探して、その値を userId に入れている
+    // どちらかに当てはまれば、ログインしていないものとして扱います。これが「有効期限」を実際にチェックしている部分
     const userId = cookieStore.get('user_id')?.value
 
     // 「もし userId がなかったら」
