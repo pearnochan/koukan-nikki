@@ -1,8 +1,14 @@
+// 記録をつける画面の部
+// ユーザーに入力してもらうフォームを作って、入力されたデータをAPIに送る部品
+
+// ユーザーが入力↓入力内容が変わる↓useStateが更新↓画面が更新↓ボタンをクリック↓関数が動くというブラウザ上での操作があるから必要。
+
 'use client'
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
+// Userというデータの形を決めている
 type User = { user_id: string; name: string}
 
 // RecordFormという部品(コンポーネント)を定義しています。 { users }: { users: User[] }は、この部品を呼び出す側(page.tsx)から**受け取る材料(props)**の指定です。「usersという名前で、User型(user_idとnameを持つオブジェクト)の配列を受け取りますよ」という意味です。page.tsx側で<RecordForm users={users} />のように渡されたデータが、ここに入ってきます。
@@ -37,13 +43,16 @@ export default function RecordForm({ users }: { users: User[]}) {
 
     // 「フォームが送信されたら、ページの通常の送信処理を止めて、前回のエラー表示を消して、このあと自分でAPIにデータを送る準備をする」
     // フォームが送信されたときに実行する handleSubmit という関数
+    // 「記録する」ボタンを押したときに実行する関数
     async function handleSubmit(e : React.FormEvent){
         e.preventDefault()
         // エラーメッセージを空にする
         setError('')
 
         // FormDataは、テキストだけでなくファイルも一緒に送れる、特殊な入れ物です。JSON.stringifyでは画像データを送れないため、ここから形式を変更しています。
+        // FormDataという「データを詰める箱」　
         const formData = new FormData()
+        // 箱に全部追加してく
         // .append(名前, 値) で、送るデータを1つずつ追加していきます。名前は、サーバー側でformData.get('title')のように取り出すときに使うキーです。
         formData.append('title', title)
         formData.append('content', content)

@@ -22,9 +22,12 @@ export default function LoginPage() {
 
     // 入力内容を保存する場所を作る
     // useState → 入力値を覚える
+    // ユーザーが入力した値をReactの状態として管理し、その値を後の処理で利用するため
     const [loginId, setLoginId] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
+
+    // ログイン成功後に自動的にトップページへ移動したいから useRouter を使っている
     const router = useRouter()
 
     // ログインボタンを押したときの処理
@@ -32,6 +35,7 @@ export default function LoginPage() {
     async function handleSubmit(e: React.FormEvent) {
 
         // まずページの通常送信を止める
+        // 今回は自分で fetch を使ってAPIに送るので、ブラウザに勝手にページを再読み込みさせない
         e.preventDefault()
 
         // エラーを一旦消す 前回ログインに失敗して、パスワードが違いますと表示されていたとしても、もう一度ログインするときには一旦消す。
@@ -41,7 +45,9 @@ export default function LoginPage() {
         // /api/login にログイン情報を送る
         const res = await fetch('/api/login',{
             method: 'POST',
+            // 「送るデータはJSON形式ですよ」
             headers: { 'Content-Type': 'application/json'},
+            // 実際のログインIDとパスワードを送っている。
             body: JSON.stringify({ login_id: loginId, password }),
         })
         
@@ -56,6 +62,7 @@ export default function LoginPage() {
 
         // ログイン成功ならトップページへ
         router.push('/')
+        router.refresh()
     }
 
 

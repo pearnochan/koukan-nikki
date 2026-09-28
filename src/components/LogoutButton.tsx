@@ -1,6 +1,8 @@
-// ログアウトボタンが押されたときに、ログアウト処理をしてログイン画面へ移動するための部品
+// 「ログアウト」ボタンを表示して、押されたらログアウトAPIを呼び、その後ログイン画面に移動する部品
+// ログアウトをクリック　handleLogout()↓/api/logout に POST↓ログイン情報のcookieを削除↓/loginへ移動
 
 // このファイルをClient Componentとして扱ってください
+
 'use client'
 
 // ページを移動するための useRouter をNext.jsから持ってくる
@@ -15,8 +17,12 @@ export default function LogoutButton() {
     async function handleLogout() {
         // APIにログアウトをお願いする
         await fetch('/api/logout', { method: 'POST' })
+
         // ログイン画面に移動する
         router.push('/login')
+
+        // サーバーコンポーネントのデータを再取得して、メニューを更新する
+        router.refresh()
     }
 
     return (

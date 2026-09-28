@@ -1,3 +1,5 @@
+// 新規登録画面を表示して、入力内容を覚えて、APIに送信し、成功したらログイン画面へ移動する
+
 // 「このページはブラウザ側で動くコンポーネントですよ」
 
 'use client'
@@ -29,6 +31,7 @@ export default function SignupPage(){
             body:JSON.stringify({ name, login_id: loginId, password }),
         })
 
+        // router.ts でのエラー処理がここに
         // 登録に失敗した場合の処理
         if(!res.ok){
             const data = await res.json()

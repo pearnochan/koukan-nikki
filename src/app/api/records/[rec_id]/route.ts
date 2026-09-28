@@ -22,6 +22,7 @@ export async function DELETE(
 ){
     const { rec_id } = await params
 
+    // 消去の順番がめっちゃ大切
     // この日記に紐づいている画像を全部削除する
     await prisma.image.deleteMany({ where:{ rec_id }})
 

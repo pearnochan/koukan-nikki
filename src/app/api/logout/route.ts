@@ -23,7 +23,7 @@ export async function POST (){
     // delete(...)は「指定した名前のクッキーを削除する」メソッド
     // ここがログアウトの本体。
     // user_idという名前のCookieを削除してください
-    cookieStore.delete('user_id')
+    cookieStore.delete('session_id')
 
     // 処理が成功したよ」という返事を、JSON形式でブラウザに返している
     return NextResponse.json({ success: true })

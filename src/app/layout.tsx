@@ -5,6 +5,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import style from './layout.module.css';
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { prisma } from "@/lib/prisma"
 import LogoutButton from "@/components/LogoutButton";
 
 
@@ -33,7 +35,21 @@ export const metadata: Metadata = {
 // {children}「ここに、そのページ自身の内容を入れてね」
 // サイト全体の共通レイアウトを作って、その中に各ページを入れている
 // children は、このレイアウトの中に入れる、現在のページの内容
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const cookieStore = await cookies()
+  const sessionId = cookieStore.get('session_id')?.value
+
+  let isLoggedIn = false
+
+  if (sessionId) {
+    const session = await prisma.session.findUnique({
+        where: { session_id: sessionId },
+    })
+    console.log('sessionId from cookie:', sessionId)
+    console.log('session found:', session)
+    isLoggedIn = !!session && session.expires_at > new Date()
+}
+console.log('isLoggedIn:', isLoggedIn)
   return (
     <html
       lang="en"
@@ -43,11 +59,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <nav className={style.nav}>
           <span className={style.menuLabel}>menu</span>
           <div className={style.menuList}>
-          <Link href="/" className={style.navLink}> ホーム </Link>
-          <Link href="/records" className={style.navLink}> 記録一覧 </Link>
-          <Link href="/records/new" className={style.navLink}> 記録をつける </Link>
-          <Link href="/signup" className={style.navLink}> 新規登録 </Link>
-          <LogoutButton />
+            {isLoggedIn ? (
+              <>
+                <Link href="/" className={style.navLink}>ホーム</Link>
+                <Link href="/records" className={style.navLink}>記録一覧</Link>
+                <Link href="/records/new" className={style.navLink}>記録をつける</Link>
+                <LogoutButton />
+              </>
+            ) : (
+              <>
+                <Link href="/login" className={style.navLink}>ログイン</Link>
+                <Link href="/signup" className={style.navLink}>新規登録</Link>
+              </>
+            )}
           </div>
         </nav>
         {children}

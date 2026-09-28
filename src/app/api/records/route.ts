@@ -33,14 +33,10 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'ログインしてください'}, { status:401 })
     }
 
-    // ログインしているか確認　　Cookieの中から user_id を探して、その値を userId に入れている
-    // どちらかに当てはまれば、ログインしていないものとして扱います。これが「有効期限」を実際にチェックしている部分
-    const userId = cookieStore.get('user_id')?.value
-
-    // 「もし userId がなかったら」
-    if (!userId) {
-        return NextResponse.json({ error: 'ログインしてください' }, { status: 401 })
-    }
+    // ログインしているユーザーのIDを、Sessionテーブルから取得する
+    // sessionには、Cookieのsession_idに対応するセッション情報が入っている
+    // そのセッションに保存されているuser_idをuserIdに入れる
+    const userId = session.user_id
 
     // リクエストの中に入ってきたフォームの入力データを取り出して、formData に入れている
     const formData = await request.formData()

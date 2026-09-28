@@ -1,7 +1,9 @@
+// DBの記録数を数えて、その数に応じた「現在の進化段階」を決めて、そのアバターを画面に表示しているページ。
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import style from './page.module.css'
 
+// Homeというページを作る
 export default async function Home() {
   // recordテーブルの**行数(全部で何件あるか)**を数えています。count()は「数える」専用のメソッド
   const recordCount = await prisma.record.count()
