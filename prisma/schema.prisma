@@ -67,7 +67,8 @@ model recpac {
 
 model image {
   image_id              String      @id @default(cuid())
-  url                   String
+  data                  Bytes
+  mime_type             String
   rec_id                String
 
   record record @relation(fields:[rec_id],references:[rec_id])

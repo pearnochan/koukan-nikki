@@ -7,8 +7,6 @@ import { prisma } from '@/lib/prisma'
 import { NextResponse } from 'next/server'
 // ログイン状態のCookieを確認する
 import { cookies } from 'next/headers'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
 
 // 「POSTという名前のAPI処理を定義して、リクエストを request として受け取る」
 export async function POST(request: Request) {
@@ -94,10 +92,7 @@ export async function POST(request: Request) {
         })
     }
 
-    // 画像を保存するためのフォルダを用意しているコード
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads')
-    // uploadDir に指定したフォルダを作ってね」という処理です。
-    await mkdir(uploadDir, { recursive: true })
+    
 
     // files の中に入っているファイルを、1個ずつ取り出して処理する
     for (const file of files) {
@@ -109,23 +104,15 @@ export async function POST(request: Request) {
         const bytes = await file.arrayBuffer()
         // ファイルとして保存しやすい形（Buffer）に変換している処理
         const buffer = Buffer.from(bytes)
-        // アップロードされた画像に「かぶりにくい名前」をつけている処理
-        const fileName = `${crypto.randomUUID()}-${file.name}`
-        // 画像を保存する場所とファイル名をつなげて、実際に保存するファイルの場所を filePath に入れる
-        const filePath = path.join(uploadDir, fileName)
-
-        // buffer に入っている画像データを、filePath に指定した場所へファイルとして保存して、保存が終わるまで待つ
-        // 画像ファイル本体
-        await writeFile(filePath, buffer)
-
+        
         // 画像ファイルを保存したあと、その画像の情報をデータベースにも登録する
         // DBに保存しているもの
         // DBのimageテーブルには、画像そのものではなく、「その画像がどこに保存されているか」という、パス(住所)の文字列だけを保存
         // 画像ファイルは、テキストデータに比べてサイズが大きいため、DBに直接入れてしまうと、DB自体が重く、扱いにくくなってしまいます。「大きいデータはファイルとして保存し、DBにはその場所の情報だけ持たせる」というのが、一般的なやり方
         await prisma.image.create({
             data: {
-                image_id: crypto.randomUUID(),
-                url: `/uploads/${fileName}`,
+                data: buffer,
+                mime_type: file.type,
                 rec_id: record.rec_id,
             },
         })
