@@ -11,6 +11,7 @@ export async function POST (request: Request){
     // リクエストで送られてきたJSONの中から name・login_id・password を取り出している行
     const { name, login_id, password } = await request.json()
 
+    // 同じログインIDがないか調べる
     // Userテーブルから、今入力されたlogin_idと同じログインIDを持つユーザーを1人探して、その結果をexistingUserに入れる
     const existingUser = await prisma.user.findFirst({
         where: { login_id },
